@@ -1,5 +1,6 @@
 package schedule;
 
+import java.util.DoubleSummaryStatistics;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,7 +13,14 @@ import static schedule.FantasySchedule.NUM_GAMES_PER_SEASON;
 public class Team {
 
     private String teamName;
-    private Map<Integer, Double> games;
+
+    // Integer represents the year the fantasy season begun in. i.e. the
+    // year the first game took place from the given season.
+    //
+    // Score for each week of the season is held in an array of doubles.
+    // Score from the week 'i' is held in index 'i-1'. Eg. Week 1 score is located
+    // at index 0, week 2 score is at index 1..... week 14 score is at index 13
+    private Map<Integer, double[]> seasons;
 
     /**
      * Creates a team at the beginning of the season
@@ -20,7 +28,9 @@ public class Team {
      */
     public Team(String name) {
         this.teamName = name;
-        this.games = new HashMap<>();
+
+        // Initialize all games with a score of 0
+        this.seasons = new HashMap<>();
     }
 
     /**
@@ -29,33 +39,41 @@ public class Team {
      * @param name of team
      * @param scores for the season
      */
-    public Team(String name, double[] scores) {
+    public Team(String name, int year, double[] scores) {
         this.teamName = name;
+
+        // Initialize all games with a score of 0
+        this.seasons = new HashMap<>();
+        addSeason(year, scores);
+    }
+
+    public void addSeason(int year, double[] scores) {
+
+        // Create a new array defensively
+        double[] games = new double[NUM_GAMES_PER_SEASON];
 
         // Add a game for each week
         for (int i = 0; i < NUM_GAMES_PER_SEASON; i++) {
-            this.addGame(i + 1, scores[i]);
+            games[i] = scores[i];
         }
+
+        seasons.put(year, games);
     }
 
-    public void addGame(int week, double score) {
-        games.put(week, score);
-    }
-
-    public double getScore(int week) {
-        return games.get(week);
+    public double getScore(int year, int week) {
+        return seasons.get(year)[week];
     }
 
     public String getTeamName() {
         return teamName;
     }
 
-    public double getPointsFor() {
+    public double getPointsFor(int year) {
         double pointsFor = 0;
 
         // Sum scores from all weeks
-        for (Integer week : games.keySet()) {
-            pointsFor += games.get(week);
+        for (double week : seasons.get(year)) {
+            pointsFor += week;
         }
 
         return pointsFor;

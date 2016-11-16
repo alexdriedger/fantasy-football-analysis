@@ -2,11 +2,9 @@ package schedule;
 
 import analysis.Stats;
 
-import java.lang.reflect.Array;
 import java.util.*;
-import java.util.concurrent.SynchronousQueue;
 
-import static java.util.Collections.unmodifiableList;
+import static com.intellij.dvcs.push.VcsPushReferenceStrategy.all;
 
 /**
  * Fantasy Schedule for one team
@@ -17,29 +15,56 @@ public class FantasySchedule {
 
     public static final int NUM_GAMES_PER_SEASON = 14;
     public static final int MAX_HEAD_TO_HEAD_GAMES = 5;
-    public static final int START_OF_SEASON = 1;
+    public static final int START_OF_SEASON = 0;
 
-    // Team records
-    public static final double[] ALEX2015 = {135.34, 126.14, 140.82, 101.48, 104.80, 153.16, 169.12, 136.38, 144.82
-            , 121.28, 103.36, 101.86, 133.78, 138.24};
-    public static final double[] BILAL2015 = {127.00, 94.16, 139.00, 91.12, 147.58, 125.16, 163.92, 120.82, 141.86,
-            133.36, 60.30, 104.02, 171.00, 174.50};
-    public static final double[] RYAN2015 = {125.22, 95.82, 157.14, 137.62, 139.80, 153.64, 109.48, 153.18, 109.20,
-            86.86, 123.80, 79.46, 150.88, 127.20};
-    public static final double[] FRED2015 = {126.44, 115.74, 176.22, 114.62, 114.62, 121.50, 95.90, 111.74, 144.84,
-            132.44, 102.80, 119.64, 104.08, 116.74};
-
-    private HashMap<Integer, String> currentSchedule;
+    // Opponent for each week of the season is held in an array of Strings.
+    // Opponent from the week 'i' is held in index 'i-1'. Eg. Week 1 opponent is located
+    // at index 0, week 2 opponent is at index 1..... week 14 opponent is at index 13
+    private String[] currentSchedule;
 
     public FantasySchedule() {
-        currentSchedule = new HashMap<>();
+        currentSchedule = new String[NUM_GAMES_PER_SEASON];
+        for (int i = 0; i < currentSchedule.length; i++) {
+            currentSchedule[i] = "";
+        }
     }
 
     public FantasySchedule(FantasySchedule current) {
         this.currentSchedule = current.getSchedule();
     }
 
-    public static Set<FantasySchedule> createSchdules(String teamName) {
+
+    /**
+     * Gets the schedule. Used in recursion for building
+     * season schedules
+     * @return Copy of the current schedule
+     */
+    public String[] getSchedule() {
+        String[] newSchedule = new String[NUM_GAMES_PER_SEASON];
+        System.arraycopy(currentSchedule, 0, newSchedule, 0, NUM_GAMES_PER_SEASON);
+        return newSchedule;
+    }
+
+    public int getNumGames() {
+        int count = 0;
+        for (String game : currentSchedule) {
+            if (!game.equals("")) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public String getOpponent(int week) {
+        return currentSchedule[week];
+    }
+
+    public FantasySchedule addGame(int week, String opponent) {
+        currentSchedule[week] = opponent;
+        return this;
+    }
+
+    public static Set<FantasySchedule> createSchedules(String teamName) {
 
         List<String> modOpponents = new ArrayList<>(Arrays.asList(ALL_OPPONENTS));
         modOpponents.remove(teamName);
@@ -69,13 +94,13 @@ public class FantasySchedule {
         int team1 = 0;
         int team2 = 0;
 
-        HashMap<Integer, String> sched = current.getSchedule();
-        for (Integer i : sched.keySet()) {
-            if ( sched.get(i).equals(opponents.get(0)) ) {
+        String[] sched = current.getSchedule();
+        for (String currentOpponent : sched) {
+            if ( currentOpponent.equals(opponents.get(0)) ) {
                 team0++;
-            } else if ( sched.get(i).equals(opponents.get(0)) ) {
+            } else if ( currentOpponent.equals(opponents.get(1)) ) {
                 team1++;
-            } else if ( sched.get(i).equals(opponents.get(0)) ) {
+            } else if ( currentOpponent.equals(opponents.get(2)) ) {
                 team2++;
             }
         }
@@ -95,37 +120,50 @@ public class FantasySchedule {
             }
         } else {
             schedule.add(current);
-            System.out.println(schedule.size());
+//            System.out.println(schedule.size());
         }
     }
 
     public static void main(String[] args) {
 
+        System.out.println("This is the win distributions for the 2015 snipper season");
+        try{Thread.sleep(2000);} catch (Exception e){}
+        System.out.println("We will now simulate all 750 000 possible schedules");
+        try{Thread.sleep(2000);} catch (Exception e){}
+        System.out.println("Let's see how well people do....");
+        try{Thread.sleep(2000);} catch (Exception e){}
         System.out.println("Creating all possible schedules");
         long t = System.currentTimeMillis();
+        distributions("Alex", 2015);
 
         // Create all possible schedules
-        Set<FantasySchedule> alexFinalSet = createSchdules("Alex");
         int currentTime = (int) (System.currentTimeMillis() - t) / 1000;
         System.out.println("Total time to create schedules: " + currentTime);
-        System.out.println("There are a total of " + alexFinalSet.size() + " possible schedules\n");
 
         // Print results
-        int possibleSchedules = alexFinalSet.size();
-        int[] alexWins = Stats.getWinsDistribution(alexFinalSet, "Alex");
-        printDistribution("Alex", alexWins, possibleSchedules);
+        distributions("Ryan", 2015);
+        distributions("Bilal", 2015);
+        distributions("Fred", 2015);
+    }
 
-        Set<FantasySchedule> ryanFinalSet = createSchdules("Ryan");
-        int[] ryanWins = Stats.getWinsDistribution(ryanFinalSet, "Ryan");
-        printDistribution("Ryan", ryanWins, possibleSchedules);
+    private static void distributions(String teamName, int year) {
+        Set<FantasySchedule> schedules = createSchedules(teamName);
+        int possibleSchedules = schedules.size();
+        int[] wins = Stats.getWinsDistribution(schedules, year, teamName);
+        printDistribution(teamName, wins, possibleSchedules);
 
-        Set<FantasySchedule> bilalFinalSet = createSchdules("Bilal");
-        int[] bilalWins = Stats.getWinsDistribution(bilalFinalSet, "Bilal");
-        printDistribution("Bilal", bilalWins, possibleSchedules);
-
-        Set<FantasySchedule> fredFinalSet = createSchdules("Fred");
-        int[] fredWins = Stats.getWinsDistribution(fredFinalSet, "Fred");
-        printDistribution("Fred", fredWins, possibleSchedules);
+//        Iterator it = schedules.iterator();
+//        while (it.hasNext()) {
+//            FantasySchedule fs = (FantasySchedule) it.next();
+//            String[] s = fs.getSchedule();
+//            for (String ss : s) {
+//                System.out.print(ss + " ");
+//            }
+//            System.out.println();
+//        }
+        try {
+            Thread.sleep(5000);
+        } catch(Exception e){}
     }
 
     private static void printDistribution(String teamName, int[] wins, int possibleScheds) {
@@ -136,45 +174,6 @@ public class FantasySchedule {
             System.out.format("%.1f", percent);
             System.out.println(" percent of the time!\n");
         }
-    }
-
-    /**
-     * Creates a team with their scores for the season
-     * @param name is team name
-     * @param scores for the entire season
-     * @return Team with scores
-     */
-    private static Team createTeam(String name, double[] scores) {
-        Team team = new Team(name);
-
-        // Add a game for each week
-        for (int i = 0; i < NUM_GAMES_PER_SEASON; i++) {
-            team.addGame(i + 1, scores[i]);
-        }
-
-        return team;
-    }
-
-    /**
-     * Gets the schedule. Used in recursion for building
-     * season schedules
-     * @return Copy of the current schedule
-     */
-    public HashMap<Integer, String> getSchedule() {
-       return new HashMap<>(currentSchedule);
-    }
-
-    public int getNumGames() {
-        return currentSchedule.size();
-    }
-
-    public String getOpponent(int week) {
-        return currentSchedule.get(week);
-    }
-
-    public FantasySchedule addGame(int week, String opponent) {
-        currentSchedule.put(week, opponent);
-        return this;
     }
 
 }
