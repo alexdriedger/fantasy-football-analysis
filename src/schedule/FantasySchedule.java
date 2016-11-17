@@ -5,6 +5,7 @@ import analysis.Stats;
 import java.util.*;
 
 import static com.intellij.dvcs.push.VcsPushReferenceStrategy.all;
+import static com.intellij.openapi.vfs.ex.dummy.DummyFileIdGenerator.next;
 
 /**
  * Fantasy Schedule for one team
@@ -62,6 +63,74 @@ public class FantasySchedule {
     public FantasySchedule addGame(int week, String opponent) {
         currentSchedule[week] = opponent;
         return this;
+    }
+
+    public static Set<FantasySchedule> createSchedulesNonRecursive(String teamName) {
+
+        // Creates list of opponents for a given team
+        List<String> modOpponents = new ArrayList<>(Arrays.asList(ALL_OPPONENTS));
+        modOpponents.remove(teamName);
+        List<String> opponents = Collections.unmodifiableList(modOpponents);
+
+        // Set for possible schedules
+        final Set<FantasySchedule> finalSchedule = new HashSet<>();
+
+        FantasySchedule initialSchedule = new FantasySchedule();
+
+        Set<FantasySchedule> currentSchedules = new HashSet<>();
+        currentSchedules.add(initialSchedule);
+
+        for (int gamesPlayed = 0; gamesPlayed < NUM_GAMES_PER_SEASON; gamesPlayed++) {
+            Set<FantasySchedule> nextSet = new HashSet<>();
+            Iterator<FantasySchedule> it = currentSchedules.iterator();
+            while (it.hasNext()) {
+                FantasySchedule current = it.next();
+
+                // Check amount of head to head games with each opponent
+                int team0 = 0;
+                int team1 = 0;
+                int team2 = 0;
+
+                String[] sched = current.getSchedule();
+                for (int i = 0; i < gamesPlayed; i++) {
+                    if ( sched[i].equals(opponents.get(0)) ) {
+                        team0++;
+                    } else if ( sched[i].equals(opponents.get(1)) ) {
+                        team1++;
+                    } else if ( sched[i].equals(opponents.get(2)) ) {
+                        team2++;
+                    }
+                }
+
+                if (team0 < MAX_HEAD_TO_HEAD_GAMES) {
+                    nextSet.add(new FantasySchedule(current.addGame(gamesPlayed, opponents.get(0))));
+                }
+//                printStringArray(current.getSchedule());
+//                System.out.println();
+                if (team1 < MAX_HEAD_TO_HEAD_GAMES) {
+                    nextSet.add(new FantasySchedule(current.addGame(gamesPlayed, opponents.get(1))));
+                }
+//                printStringArray(current.getSchedule());
+//                System.out.println();
+                if (team2 < MAX_HEAD_TO_HEAD_GAMES) {
+                    nextSet.add(new FantasySchedule(current.addGame(gamesPlayed, opponents.get(2))));
+                }
+//                printStringArray(current.getSchedule());
+//                System.out.println();
+//                System.out.println(nextSet.size());
+            }
+            currentSchedules.clear();
+            currentSchedules.addAll(nextSet);
+            System.out.println(gamesPlayed);
+        }
+
+        return currentSchedules;
+    }
+
+    private static void  printStringArray(String[] schedule) {
+        for (String s : schedule) {
+            System.out.print(s + " ");
+        }
     }
 
     public static Set<FantasySchedule> createSchedules(String teamName) {
@@ -147,7 +216,7 @@ public class FantasySchedule {
     }
 
     private static void distributions(String teamName, int year) {
-        Set<FantasySchedule> schedules = createSchedules(teamName);
+        Set<FantasySchedule> schedules = createSchedulesNonRecursive(teamName);
         int possibleSchedules = schedules.size();
         int[] wins = Stats.getWinsDistribution(schedules, year, teamName);
         printDistribution(teamName, wins, possibleSchedules);
