@@ -189,24 +189,24 @@ public class FantasySchedule {
 
     public static void main(String[] args) {
 
-        System.out.println("This is the win distributions for the 2015 snipper season");
-        try{Thread.sleep(2000);} catch (Exception e){}
-        System.out.println("We will now simulate all 750 000 possible schedules");
-        try{Thread.sleep(2000);} catch (Exception e){}
-        System.out.println("Let's see how well people do....");
-        try{Thread.sleep(2000);} catch (Exception e){}
+//        System.out.println("This is the win distributions for the 2015 snipper season");
+//        try{Thread.sleep(2000);} catch (Exception e){}
+//        System.out.println("We will now simulate all 750 000 possible schedules");
+//        try{Thread.sleep(2000);} catch (Exception e){}
+//        System.out.println("Let's see how well people do....");
+//        try{Thread.sleep(2000);} catch (Exception e){}
         System.out.println("Creating all possible schedules");
         long t = System.currentTimeMillis();
         distributions(Player.ALEX, 2015);
 
-        // Create all possible schedules
-        int currentTime = (int) (System.currentTimeMillis() - t) / 1000;
-        System.out.println("Total time to create schedules: " + currentTime);
-
-        // Print results
-        distributions(Player.RYAN, 2015);
-        distributions(Player.BILAL, 2015);
-        distributions(Player.FRED, 2015);
+//        // Create all possible schedules
+//        int currentTime = (int) (System.currentTimeMillis() - t) / 1000;
+//        System.out.println("Total time to create schedules: " + currentTime);
+//
+//        // Print results
+//        distributions(Player.RYAN, 2015);
+//        distributions(Player.BILAL, 2015);
+//        distributions(Player.FRED, 2015);
     }
 
     private static void distributions(Player teamName, int year) {
@@ -214,6 +214,13 @@ public class FantasySchedule {
         int possibleSchedules = schedules.size();
         int[] wins = Stats.getWinsDistribution(schedules, year, teamName);
         printDistribution(teamName, wins, possibleSchedules);
+
+        Map<Player, Integer> champions = Stats.simSeason(schedules, year, teamName);
+        for (Player player : Player.values()) {
+            System.out.println(player + " won the season " + champions.get(player) + " times!");
+            double percent = (double) champions.get(player) / (double) possibleSchedules * 100.0;
+            System.out.println("That is " + percent + " of the time!" );
+        }
 
 //        Iterator it = schedules.iterator();
 //        while (it.hasNext()) {
