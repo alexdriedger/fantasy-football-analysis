@@ -7,6 +7,10 @@ import java.util.*;
 import static com.intellij.dvcs.push.VcsPushReferenceStrategy.all;
 import static com.intellij.openapi.vfs.ex.dummy.DummyFileIdGenerator.next;
 
+enum Player{
+    ALEX, BILAL, RYAN, FRED
+}
+
 /**
  * Fantasy Schedule for one team
  */
