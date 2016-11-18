@@ -8,7 +8,7 @@ import java.util.Map;
  */
 public class League {
 
-    private Map<String, Team> league;
+    private Map<Player, Team> league;
 
     // Team records
     private static final double[] ALEX2015 = {135.34, 126.14, 140.82, 101.48, 104.80, 153.16, 169.12, 136.38, 144.82
@@ -22,13 +22,13 @@ public class League {
 
     public League() {
         this.league = new HashMap<>();
-        this.league.put("Alex", new Team("Alex", 2015, ALEX2015));
-        this.league.put("Bilal", new Team("Bilal", 2015, BILAL2015));
-        this.league.put("Ryan", new Team("Ryan", 2015, RYAN2015));
-        this.league.put("Fred", new Team("Fred", 2015, FRED2015));
+        this.league.put(Player.ALEX, new Team(Player.ALEX, 2015, ALEX2015));
+        this.league.put(Player.BILAL, new Team(Player.BILAL, 2015, BILAL2015));
+        this.league.put(Player.RYAN, new Team(Player.RYAN, 2015, RYAN2015));
+        this.league.put(Player.FRED, new Team(Player.FRED, 2015, FRED2015));
     }
 
-    public Team getTeam(String name) {
+    public Team getTeam(Player name) {
         return league.get(name);
     }
 }

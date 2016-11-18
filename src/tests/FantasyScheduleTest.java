@@ -3,6 +3,7 @@ package tests;
 import org.junit.Assert;
 import org.junit.Test;
 import schedule.FantasySchedule;
+import schedule.Player;
 
 /**
  * Test for {@link schedule.FantasySchedule}
@@ -54,11 +55,11 @@ public class FantasyScheduleTest {
 
         Assert.assertEquals(0, fs.getNumGames());
 
-        fs.addGame(0, "Bilal");
+        fs.addGame(0, Player.BILAL);
 
         Assert.assertEquals(1, fs.getNumGames());
 
-        fs.addGame(5, "Fred");
+        fs.addGame(5, Player.FRED);
 
         Assert.assertEquals(2, fs.getNumGames());
     }

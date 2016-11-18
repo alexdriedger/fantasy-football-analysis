@@ -1,7 +1,9 @@
 package analysis;
 
+import com.btr.proxy.util.PlatformUtil;
 import schedule.FantasySchedule;
 import schedule.League;
+import schedule.Player;
 import schedule.Team;
 
 import java.util.*;
@@ -13,19 +15,19 @@ import static schedule.FantasySchedule.*;
  */
 public class Stats {
 
-    public static int[] getWinsDistribution(Set<FantasySchedule> schedules, int year, String teamName) {
+    public static int[] getWinsDistribution(Set<FantasySchedule> schedules, int year, Player teamName) {
         League snipper = new League();
 
         // Find the team to get stats on
         Team currentTeam;
         switch (teamName) {
-            case "Alex": currentTeam = snipper.getTeam("Alex");
+            case ALEX: currentTeam = snipper.getTeam(Player.ALEX);
                 break;
-            case "Ryan": currentTeam = snipper.getTeam("Ryan");
+            case RYAN: currentTeam = snipper.getTeam(Player.RYAN);
                 break;
-            case "Bilal": currentTeam = snipper.getTeam("Bilal");
+            case BILAL: currentTeam = snipper.getTeam(Player.BILAL);
                 break;
-            case "Fred": currentTeam = snipper.getTeam("Fred");
+            case FRED: currentTeam = snipper.getTeam(Player.FRED);
                 break;
             default: throw new IllegalArgumentException(teamName + " is not in this league");
         }

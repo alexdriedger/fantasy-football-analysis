@@ -12,7 +12,7 @@ import static schedule.FantasySchedule.NUM_GAMES_PER_SEASON;
  */
 public class Team {
 
-    private String teamName;
+    private Player teamName;
 
     // Integer represents the year the fantasy season begun in. i.e. the
     // year the first game took place from the given season.
@@ -26,7 +26,7 @@ public class Team {
      * Creates a team at the beginning of the season
      * @param name
      */
-    public Team(String name) {
+    public Team(Player name) {
         this.teamName = name;
 
         // Initialize all games with a score of 0
@@ -39,7 +39,7 @@ public class Team {
      * @param name of team
      * @param scores for the season
      */
-    public Team(String name, int year, double[] scores) {
+    public Team(Player name, int year, double[] scores) {
         this.teamName = name;
 
         // Initialize all games with a score of 0
@@ -65,7 +65,7 @@ public class Team {
     }
 
     public String getTeamName() {
-        return teamName;
+        return teamName.toString().substring(0, 1) + teamName.toString().substring(1).toLowerCase();
     }
 
     public double getPointsFor(int year) {
