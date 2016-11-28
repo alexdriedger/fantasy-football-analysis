@@ -5,118 +5,76 @@ package schedule;
  */
 public class Matchup {
 
-    private static final String NEGATIVE_SCORE_MESSAGE = "Score cannot be negative";
-    private static final String SCORE_NOT_SET_MESSAGE = "Score has not been set";
-
+    // Week the matchup is occurring in
+    private Week week;
     // Team names
-    private String team1Name;
-    private String team2Name;
+    private Player team1Name;
+    private Player team2Name;
 
-    // Team scores
-    private double team1Score;
-    private double team2Score;
+    private Team team1;
+    private Team team2;
 
     /**
-     * Creates a Matchup with scores set to 0
+     * Creates a Matchup with two teams
+     * @param week the matchup is occurring in
      * @param team1
      * @param team2
      */
-    public Matchup(String team1, String team2) {
-
+    public Matchup(Week week, Player team1, Player team2) {
+        // League the matchup is occurring in
+        this.week = week;
         // Set team names
         this.team1Name = team1;
         this.team2Name = team2;
 
-        // Set team scores
-        this.team1Score = 0;
-        this.team2Score = 0;
-    }
-
-    /**
-     * Creates a Mathup with scores for both teams.
-     * Throws IllegalArgumentException if scores are negative
-     * @param team1
-     * @param team2
-     * @param team1Score
-     * @param team2Score
-     */
-    public Matchup(String team1, String team2, double team1Score, double team2Score) {
-
-        // Throw exception if either score is negative
-        if (team1Score < 0 || team2Score < 0) {
-            throw new IllegalArgumentException(NEGATIVE_SCORE_MESSAGE);
-        }
-
-        // Set team names
-        this.team1Name = team1;
-        this.team2Name = team2;
-
-        // Set team scores
-        this.team1Score = team1Score;
-        this.team2Score = team2Score;
-    }
-
-    /**
-     * Sets team 1 score
-     * @param score
-     */
-    public void setTeam1Score(double score) {
-        team1Score = score;
-    }
-
-    /**
-     * Sets team 2 score
-     * @param score
-     */
-    public void setTeam2Score(double score) {
-        team2Score = score;
+        // Gets the Teams from the League
+        this.team1 = week.getLeague().getTeam(team1);
+        this.team2 = week.getLeague().getTeam(team2);
     }
 
     /**
      * Gets team1's Name
-     * @return String with team name
+     * @return Player with team name
      */
-    public String getTeam1Name() {
+    public Player getTeam1Name() {
         return team1Name;
     }
 
     /**
      * Gets team2's Name
-     * @return String with team name
+     * @return Player with team name
      */
-    public String getTeam2Name() {
+    public Player getTeam2Name() {
         return team2Name;
     }
 
-    /**
-     * Gets team1's Score
-     * @return Team1's score
-     */
-    public double getTeam1Score() {
-        return team1Score;
-    }
+    // Get the winner of the Matchup
+    public Player getWinner() {
+        int year = week.getSeason().getyear();
+        int weekNumber = week.getWeekNumber();
 
-    /**
-     * Gets team2's Score
-     * @return Team2's score
-     */
-    public double getTeam2Score() {
-        return team2Score;
-    }
+        // Determine winner
+        // Use weekNumber - 1 because getScore method is for the week - 1
+        double result = team1.getScore(year, weekNumber - 1) - team2.getScore(year, weekNumber);
 
-    /**
-     *
-     * @return
-     */
-    public String getWinner() {
-        if (team1Score == 0 && team2Score == 0) {
-            throw new IllegalStateException(SCORE_NOT_SET_MESSAGE);
-        }
-        else if (team1Score > team2Score) {
+        // Increment winner's record
+        if (result > 0) {
             return team1Name;
         }
-        else {
+        else if (result < 0) {
             return team2Name;
         }
+        else {
+            throw new IllegalStateException("There was a tie. You should deal with that");
+        }
+    }
+
+    public boolean equals(Matchup other) {
+        // If both teams are the same in both matchups, the matchup is equal
+        // i.e. it doesn't matter who is home or away
+        return ( team1Name.equals(other.getTeam1Name()) &&
+                team2Name.equals(other.getTeam2Name()) ) ||
+                ( team1Name.equals(other.getTeam2Name()) &&
+                team2Name.equals(other.getTeam1Name()) );
     }
 }

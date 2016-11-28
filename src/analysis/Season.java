@@ -15,6 +15,7 @@ public class Season {
 
     private Map<Player, Integer> records;
     private League league;
+    private int year;
 
     public Season() {
         records = new HashMap<>();
@@ -23,6 +24,16 @@ public class Season {
         records.put(Player.BILAL, 0);
         records.put(Player.FRED, 0);
         league = new League();
+        year = 2015; // TODO: Put this into contructor
+    }
+
+    // Return the league the season is in
+    public League getLeague() {
+        return league;
+    }
+
+    public int getyear() {
+        return year;
     }
 
     private void addWinner(Player winner) {
@@ -30,20 +41,24 @@ public class Season {
         records.put(winner, currentWins + 1);
     }
 
-    public void computeAndStoreWinner(Player team0, Player team1, int year, int week) {
+    private Player computeWinner(Player team0, Player team1, int year, int week) {
         // Determine winner
         double result = league.getTeam(team0).getScore(year, week) - league.getTeam(team1).getScore(year, week);
 
         // Increment winner's record
         if (result > 0) {
-            addWinner(team0);
+            return team0;
         }
         else if (result < 0) {
-            addWinner(team1);
+            return team1;
         }
         else {
-            System.out.println("There was a tie. You should deal with that");
+            throw new IllegalStateException("There was a tie. You should deal with that");
         }
+    }
+
+    public void computeAndStoreWinner(Player team0, Player team1, int year, int week) {
+        addWinner(computeWinner(team0, team1, year, week));
     }
 
     public List<Player> getFinalsMatchup(int year) {

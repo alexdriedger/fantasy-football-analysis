@@ -2,6 +2,7 @@ package schedule;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Represents a fantasy football league
@@ -30,5 +31,9 @@ public class League {
 
     public Team getTeam(Player name) {
         return league.get(name);
+    }
+
+    public Set<Player> getPlayers() {
+        return league.keySet();
     }
 }

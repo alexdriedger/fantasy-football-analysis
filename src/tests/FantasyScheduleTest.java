@@ -1,53 +1,17 @@
 package tests;
 
+import analysis.Stats;
 import org.junit.Assert;
 import org.junit.Test;
 import schedule.FantasySchedule;
 import schedule.Player;
 
+import java.util.Set;
+
 /**
  * Test for {@link schedule.FantasySchedule}
  */
 public class FantasyScheduleTest {
-
-    @Test
-    public void arrayCopyDoubleTest() {
-        double[] initial = {1.1,2.2,3.3};
-        double[] result = new double[3];
-        System.arraycopy(initial,0, result, 0, initial.length);
-
-        result[2] = 14.2;
-        result[0] = .4;
-
-        double[] expected = new double[]{1.1, 2.2, 3.3};
-        Assert.assertArrayEquals(expected, initial, .001);
-    }
-
-    @Test
-    public void arrayCopyStringTest() {
-        String[] initial = {"Bilal", "Fred", "Ryan"};
-        String[] result = new String[3];
-        System.arraycopy(initial,0, result, 0, initial.length);
-
-        result[1] = "Alex";
-        result[0] = "Alex";
-
-        String[] expected = new String[]{"Bilal", "Fred", "Ryan"};;
-        Assert.assertArrayEquals(expected, initial);
-    }
-
-    @Test
-    public void createEmptySchedule() {
-        String[] result = new String[3];
-
-        for (int i = 0; i < result.length; i++) {
-            result[i] = "";
-        }
-
-        for(String s : result) {
-            System.out.println(s);
-        }
-    }
 
     @Test
     public void getNumGamesTest() {
@@ -62,6 +26,12 @@ public class FantasyScheduleTest {
         fs.addGame(5, Player.FRED);
 
         Assert.assertEquals(2, fs.getNumGames());
+    }
+
+    @Test
+    public void getWinsDistributionsTest() {
+        Set<FantasySchedule> schedules = FantasySchedule.createSchedulesNonRecursive(Player.ALEX);
+        Assert.assertEquals(756756, schedules.size());
     }
 
 }

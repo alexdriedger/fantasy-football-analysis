@@ -3,9 +3,7 @@ package schedule;
 import analysis.Stats;
 
 import java.util.*;
-
-import static com.intellij.dvcs.push.VcsPushReferenceStrategy.all;
-import static com.intellij.openapi.vfs.ex.dummy.DummyFileIdGenerator.next;
+import java.util.concurrent.ForkJoinPool;
 
 /**
  * Fantasy Schedule for one team
@@ -65,6 +63,13 @@ public class FantasySchedule {
         return this;
     }
 
+//    public static Set<FantasySchedule> createSchedulesParallel(Player teamName) {
+//        CreateFantasySchedules schedules = new CreateFantasySchedules();
+//        ForkJoinPool pool = new ForkJoinPool();
+//        pool.invoke(schedules);
+//
+//    }
+
     public static Set<FantasySchedule> createSchedulesNonRecursive(Player teamName) {
 
         // Creates list of opponents for a given team
@@ -105,19 +110,15 @@ public class FantasySchedule {
                 if (team0 < MAX_HEAD_TO_HEAD_GAMES) {
                     nextSet.add(new FantasySchedule(current.addGame(gamesPlayed, opponents.get(0))));
                 }
-//                printStringArray(current.getSchedule());
-//                System.out.println();
+
                 if (team1 < MAX_HEAD_TO_HEAD_GAMES) {
                     nextSet.add(new FantasySchedule(current.addGame(gamesPlayed, opponents.get(1))));
                 }
-//                printStringArray(current.getSchedule());
-//                System.out.println();
+
                 if (team2 < MAX_HEAD_TO_HEAD_GAMES) {
                     nextSet.add(new FantasySchedule(current.addGame(gamesPlayed, opponents.get(2))));
                 }
-//                printStringArray(current.getSchedule());
-//                System.out.println();
-//                System.out.println(nextSet.size());
+
             }
             currentSchedules.clear();
             currentSchedules.addAll(nextSet);
@@ -203,10 +204,10 @@ public class FantasySchedule {
 //        int currentTime = (int) (System.currentTimeMillis() - t) / 1000;
 //        System.out.println("Total time to create schedules: " + currentTime);
 //
-//        // Print results
-//        distributions(Player.RYAN, 2015);
-//        distributions(Player.BILAL, 2015);
-//        distributions(Player.FRED, 2015);
+        // Print results
+        distributions(Player.RYAN, 2015);
+        distributions(Player.BILAL, 2015);
+        distributions(Player.FRED, 2015);
     }
 
     private static void distributions(Player teamName, int year) {
