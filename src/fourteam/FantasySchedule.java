@@ -210,10 +210,10 @@ public class FantasySchedule {
     private static void distributions(SnipperPlayers teamName, int year) {
         Set<FantasySchedule> schedules = createSchedulesNonRecursive(teamName);
         int possibleSchedules = schedules.size();
-        int[] wins = Stats.getWinsDistribution(schedules, year, teamName);
+        int[] wins = FourTeamStats.getWinsDistribution(schedules, year, teamName);
         printDistribution(teamName, wins, possibleSchedules);
 
-        Map<SnipperPlayers, Integer> champions = Stats.simSeason(schedules, year, teamName);
+        Map<SnipperPlayers, Integer> champions = FourTeamStats.simSeason(schedules, year, teamName);
         for (SnipperPlayers player : SnipperPlayers.values()) {
             System.out.println(player + " won the season " + champions.get(player) + " times!");
             double percent = (double) champions.get(player) / (double) possibleSchedules * 100.0;

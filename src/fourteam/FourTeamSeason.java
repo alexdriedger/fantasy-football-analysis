@@ -7,13 +7,13 @@ import static javax.swing.UIManager.get;
 /**
  * Keeps track of the records of teams for a current season
  */
-public class Season {
+public class FourTeamSeason {
 
     private Map<SnipperPlayers, Integer> records;
     private FourTeamLeague league;
     private int year;
 
-    public Season() {
+    public FourTeamSeason() {
         records = new HashMap<>();
         records.put(SnipperPlayers.ALEX, 0);
         records.put(SnipperPlayers.RYAN, 0);

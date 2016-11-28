@@ -1,24 +1,24 @@
 package schedule;
 
 import fourteam.FourTeamLeague;
-import fourteam.Season;
+import fourteam.FourTeamSeason;
 import fourteam.SnipperPlayers;
 
 import java.util.*;
 
 /**
- * One week in a Fantasy Football Season
+ * One week in a Fantasy Football FourTeamSeason
  */
 public class Week {
 
-    // Season that the league takes place in
-    private Season season;
+    // FourTeamSeason that the league takes place in
+    private FourTeamSeason season;
     // All the matchups of the week
     private Set<Matchup> matchups;
     // The week number in the season
     private int weekNum;
 
-    public Week(Season season, int weekNumber) {
+    public Week(FourTeamSeason season, int weekNumber) {
         this.season = season;
         this.weekNum = weekNumber;
         this.matchups = new HashSet<>();
@@ -28,7 +28,7 @@ public class Week {
         return weekNum;
     }
 
-    public Season getSeason() {
+    public FourTeamSeason getSeason() {
         return season;
     }
 

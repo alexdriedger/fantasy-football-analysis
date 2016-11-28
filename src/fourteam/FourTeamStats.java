@@ -8,7 +8,7 @@ import static fourteam.FantasySchedule.*;
 /**
  * Analysis for fantasy schedules
  */
-public class Stats {
+public class FourTeamStats {
 
     public static int[] getWinsDistribution(Set<FantasySchedule> schedules, int year, SnipperPlayers teamName) {
         FourTeamLeague snipper = new FourTeamLeague();
@@ -42,7 +42,7 @@ public class Stats {
 
     public static Map<SnipperPlayers, Integer> simSeason(Set<FantasySchedule> schedules, int year, SnipperPlayers currentPlayer) {
         FourTeamLeague snipper = new FourTeamLeague();
-        Season season = new Season();
+        FourTeamSeason season = new FourTeamSeason();
         List<SnipperPlayers> opponents = new ArrayList<>(Arrays.asList(SnipperPlayers.values()));
         opponents.remove(currentPlayer);
         List<SnipperPlayers> secondGame;
@@ -55,7 +55,7 @@ public class Stats {
 
         for (FantasySchedule fantasySchedule : schedules) {
 
-            // Simulate Regular Season
+            // Simulate Regular FourTeamSeason
             for (int weekMinusOne = 0; weekMinusOne < NUM_GAMES_PER_SEASON; weekMinusOne++) {
                 // Current opponent
                 SnipperPlayers firstOpponent = fantasySchedule.getOpponent(weekMinusOne);

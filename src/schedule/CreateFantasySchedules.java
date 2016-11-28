@@ -36,6 +36,6 @@ public abstract class CreateFantasySchedules extends RecursiveAction {
         this.seasonLength = seasonLength;
     }
 
-    // TODO: Update Season class to use Matchups instead of Fantasy Schedule
+    // TODO: Update FourTeamSeason class to use Matchups instead of Fantasy Schedule
     // TODO: Implement this class
 }

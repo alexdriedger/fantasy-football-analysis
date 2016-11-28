@@ -1,16 +1,15 @@
 package schedule;
 
-import fourteam.Season;
+import fourteam.FourTeamSeason;
 import fourteam.FourTeamLeague;
 import fourteam.SnipperPlayers;
-import schedule.Week;
 
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
- * A Season for a general league with any amount of teams
+ * A FourTeamSeason for a general league with any amount of teams
  */
 public class SeasonWMatchups {
 
@@ -36,7 +35,7 @@ public class SeasonWMatchups {
     }
 
     // Creates all possible seasons for a given league
-    public static List<Season> createSeasons(FourTeamLeague league) {
+    public static List<FourTeamSeason> createSeasons(FourTeamLeague league) {
         // List of players in the league
         List<SnipperPlayers> players = new ArrayList<>(league.getPlayers());
 
@@ -47,6 +46,6 @@ public class SeasonWMatchups {
         // Do I only need to create one possible week and then iterate through it for each
         // week in the season?
 
-        return new ArrayList<Season>(); // TODO: Change this
+        return new ArrayList<FourTeamSeason>(); // TODO: Change this
     }
 }
