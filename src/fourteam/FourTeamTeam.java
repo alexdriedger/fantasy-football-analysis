@@ -1,18 +1,17 @@
-package schedule;
+package fourteam;
 
-import java.util.DoubleSummaryStatistics;
 import java.util.HashMap;
 import java.util.Map;
 
 import static javax.swing.UIManager.get;
-import static schedule.FantasySchedule.NUM_GAMES_PER_SEASON;
+import static fourteam.FantasySchedule.NUM_GAMES_PER_SEASON;
 
 /**
- * Fantasy Football Team
+ * Fantasy Football FourTeamTeam
  */
-public class Team {
+public class FourTeamTeam {
 
-    private Player teamName;
+    private SnipperPlayers teamName;
 
     // Integer represents the year the fantasy season begun in. i.e. the
     // year the first game took place from the given season.
@@ -26,7 +25,7 @@ public class Team {
      * Creates a team at the beginning of the season
      * @param name
      */
-    public Team(Player name) {
+    public FourTeamTeam(SnipperPlayers name) {
         this.teamName = name;
 
         // Initialize all games with a score of 0
@@ -39,7 +38,7 @@ public class Team {
      * @param name of team
      * @param scores for the season
      */
-    public Team(Player name, int year, double[] scores) {
+    public FourTeamTeam(SnipperPlayers name, int year, double[] scores) {
         this.teamName = name;
 
         // Initialize all games with a score of 0

@@ -1,15 +1,14 @@
-package tests;
+package fourteamtests;
 
-import analysis.Stats;
 import org.junit.Assert;
 import org.junit.Test;
-import schedule.FantasySchedule;
-import schedule.Player;
+import fourteam.FantasySchedule;
+import fourteam.SnipperPlayers;
 
 import java.util.Set;
 
 /**
- * Test for {@link schedule.FantasySchedule}
+ * Test for {@link FantasySchedule}
  */
 public class FantasyScheduleTest {
 
@@ -19,18 +18,18 @@ public class FantasyScheduleTest {
 
         Assert.assertEquals(0, fs.getNumGames());
 
-        fs.addGame(0, Player.BILAL);
+        fs.addGame(0, SnipperPlayers.BILAL);
 
         Assert.assertEquals(1, fs.getNumGames());
 
-        fs.addGame(5, Player.FRED);
+        fs.addGame(5, SnipperPlayers.FRED);
 
         Assert.assertEquals(2, fs.getNumGames());
     }
 
     @Test
     public void getWinsDistributionsTest() {
-        Set<FantasySchedule> schedules = FantasySchedule.createSchedulesNonRecursive(Player.ALEX);
+        Set<FantasySchedule> schedules = FantasySchedule.createSchedulesNonRecursive(SnipperPlayers.ALEX);
         Assert.assertEquals(756756, schedules.size());
     }
 

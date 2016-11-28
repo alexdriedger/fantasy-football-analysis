@@ -1,7 +1,8 @@
-package analysis;
+package schedule;
 
-import schedule.League;
-import schedule.Player;
+import fourteam.Season;
+import fourteam.FourTeamLeague;
+import fourteam.SnipperPlayers;
 import schedule.Week;
 
 import java.util.*;
@@ -14,15 +15,15 @@ import java.util.stream.Collectors;
 public class SeasonWMatchups {
 
     // Wins for each player
-    private Map<Player, Integer> wins;
+    private Map<SnipperPlayers, Integer> wins;
     // Lists of Weeks. Each Week contains Matchups
     private List<Week> wkSchedules;
-    // League the season takes place in
-    private League league;
+    // FourTeamLeague the season takes place in
+    private FourTeamLeague league;
     // Year for the league
     private int year;
 
-    public SeasonWMatchups(Set<Player> players, League league, int year) {
+    public SeasonWMatchups(Set<SnipperPlayers> players, FourTeamLeague league, int year) {
         // Add all players to the map of wins. All Players start with 0 wins
         this.wins = players.stream().collect(Collectors.toMap(Function.identity(), player -> 0));
         this.league = league;
@@ -30,14 +31,14 @@ public class SeasonWMatchups {
     }
 
     // Return the league the season is in
-    public League getLeague() {
+    public FourTeamLeague getLeague() {
         return league;
     }
 
     // Creates all possible seasons for a given league
-    public static List<Season> createSeasons(League league) {
+    public static List<Season> createSeasons(FourTeamLeague league) {
         // List of players in the league
-        List<Player> players = new ArrayList<>(league.getPlayers());
+        List<SnipperPlayers> players = new ArrayList<>(league.getPlayers());
 
         // create all possible matchups in a week
 

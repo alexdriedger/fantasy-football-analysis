@@ -1,8 +1,8 @@
-package schedule;
+package fourteam;
 
 /**
  * All the players in the snipper league
  */
-public enum Player{
+public enum SnipperPlayers {
     ALEX, BILAL, RYAN, FRED
 }

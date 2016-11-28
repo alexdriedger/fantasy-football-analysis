@@ -1,6 +1,8 @@
 package schedule;
 
-import analysis.Season;
+import fourteam.FourTeamLeague;
+import fourteam.Season;
+import fourteam.SnipperPlayers;
 
 import java.util.*;
 
@@ -30,7 +32,7 @@ public class Week {
         return season;
     }
 
-    public League getLeague() {
+    public FourTeamLeague getLeague() {
         return season.getLeague();
     }
 
@@ -42,16 +44,16 @@ public class Week {
         matchups.add(game);
     }
 
-    public static List<Matchup> getAllPossibleMatchups(List<Player> players) {
+    public static List<Matchup> getAllPossibleMatchups(List<SnipperPlayers> players) {
         // Create copy of list so it can be modified without modifying the original list
-        List<Player> currentPlayers = new ArrayList<>();
+        List<SnipperPlayers> currentPlayers = new ArrayList<>();
         Collections.copy(currentPlayers, players);
 
         List<Matchup> matchups = new ArrayList<>();
 
-        for (Player cp : currentPlayers) {
+        for (SnipperPlayers cp : currentPlayers) {
             currentPlayers.remove(cp);
-            for (Player other : currentPlayers) {
+            for (SnipperPlayers other : currentPlayers) {
                 // TODO: Add new Matchup to the list with (cp, other)
             }
 

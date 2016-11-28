@@ -1,5 +1,8 @@
 package schedule;
 
+import fourteam.FourTeamTeam;
+import fourteam.SnipperPlayers;
+
 /**
  * Matchup between two teams
  */
@@ -7,12 +10,12 @@ public class Matchup {
 
     // Week the matchup is occurring in
     private Week week;
-    // Team names
-    private Player team1Name;
-    private Player team2Name;
+    // FourTeamTeam names
+    private SnipperPlayers team1Name;
+    private SnipperPlayers team2Name;
 
-    private Team team1;
-    private Team team2;
+    private FourTeamTeam team1;
+    private FourTeamTeam team2;
 
     /**
      * Creates a Matchup with two teams
@@ -20,36 +23,36 @@ public class Matchup {
      * @param team1
      * @param team2
      */
-    public Matchup(Week week, Player team1, Player team2) {
-        // League the matchup is occurring in
+    public Matchup(Week week, SnipperPlayers team1, SnipperPlayers team2) {
+        // FourTeamLeague the matchup is occurring in
         this.week = week;
         // Set team names
         this.team1Name = team1;
         this.team2Name = team2;
 
-        // Gets the Teams from the League
+        // Gets the Teams from the FourTeamLeague
         this.team1 = week.getLeague().getTeam(team1);
         this.team2 = week.getLeague().getTeam(team2);
     }
 
     /**
      * Gets team1's Name
-     * @return Player with team name
+     * @return SnipperPlayers with team name
      */
-    public Player getTeam1Name() {
+    public SnipperPlayers getTeam1Name() {
         return team1Name;
     }
 
     /**
      * Gets team2's Name
-     * @return Player with team name
+     * @return SnipperPlayers with team name
      */
-    public Player getTeam2Name() {
+    public SnipperPlayers getTeam2Name() {
         return team2Name;
     }
 
     // Get the winner of the Matchup
-    public Player getWinner() {
+    public SnipperPlayers getWinner() {
         int year = week.getSeason().getyear();
         int weekNumber = week.getWeekNumber();
 

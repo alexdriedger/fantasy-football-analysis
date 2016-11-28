@@ -1,8 +1,8 @@
 package schedule;
 
-import analysis.Season;
-import analysis.SeasonWMatchups;
 import com.intellij.util.containers.ConcurrentList;
+import fourteam.FantasySchedule;
+import fourteam.SnipperPlayers;
 
 import java.util.List;
 import java.util.concurrent.RecursiveAction;
@@ -21,14 +21,14 @@ public abstract class CreateFantasySchedules extends RecursiveAction {
     private ConcurrentList<SeasonWMatchups> finalSchedules;
 
     //
-    private List<Player> opponents;
+    private List<SnipperPlayers> opponents;
     // Size of current schedule
     private int currentGames;
     // Number of games in the regular season
     private int seasonLength;
 
     public CreateFantasySchedules(SeasonWMatchups currentSchedule, ConcurrentList<SeasonWMatchups> finalSchedules,
-                                  List<Player> opponents, int currentGames, int seasonLength) {
+                                  List<SnipperPlayers> opponents, int currentGames, int seasonLength) {
         this.currentSchedule = currentSchedule;
         this.finalSchedules = finalSchedules;
         this.opponents = opponents;

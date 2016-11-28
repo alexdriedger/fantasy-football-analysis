@@ -1,9 +1,6 @@
-package schedule;
-
-import analysis.Stats;
+package fourteam;
 
 import java.util.*;
-import java.util.concurrent.ForkJoinPool;
 
 /**
  * Fantasy Schedule for one team
@@ -19,10 +16,10 @@ public class FantasySchedule {
     // Opponent for each week of the season is held in an array of Strings.
     // Opponent from the week 'i' is held in index 'i-1'. Eg. Week 1 opponent is located
     // at index 0, week 2 opponent is at index 1..... week 14 opponent is at index 13
-    private Player[] currentSchedule;
+    private SnipperPlayers[] currentSchedule;
 
     public FantasySchedule() {
-        currentSchedule = new Player[NUM_GAMES_PER_SEASON];
+        currentSchedule = new SnipperPlayers[NUM_GAMES_PER_SEASON];
 //        for (int i = 0; i < currentSchedule.length; i++) {
 //            currentSchedule[i] = "";
 //        }
@@ -38,15 +35,15 @@ public class FantasySchedule {
      * season schedules
      * @return Copy of the current schedule
      */
-    public Player[] getSchedule() {
-        Player[] newSchedule = new Player[NUM_GAMES_PER_SEASON];
+    public SnipperPlayers[] getSchedule() {
+        SnipperPlayers[] newSchedule = new SnipperPlayers[NUM_GAMES_PER_SEASON];
         System.arraycopy(currentSchedule, 0, newSchedule, 0, NUM_GAMES_PER_SEASON);
         return newSchedule;
     }
 
     public int getNumGames() {
         int count = 0;
-        for (Player game : currentSchedule) {
+        for (SnipperPlayers game : currentSchedule) {
             if (game != null) {
                 count++;
             }
@@ -54,28 +51,28 @@ public class FantasySchedule {
         return count;
     }
 
-    public Player getOpponent(int week) {
+    public SnipperPlayers getOpponent(int week) {
         return currentSchedule[week];
     }
 
-    public FantasySchedule addGame(int week, Player opponent) {
+    public FantasySchedule addGame(int week, SnipperPlayers opponent) {
         currentSchedule[week] = opponent;
         return this;
     }
 
-//    public static Set<FantasySchedule> createSchedulesParallel(Player teamName) {
+//    public static Set<FantasySchedule> createSchedulesParallel(SnipperPlayers teamName) {
 //        CreateFantasySchedules schedules = new CreateFantasySchedules();
 //        ForkJoinPool pool = new ForkJoinPool();
 //        pool.invoke(schedules);
 //
 //    }
 
-    public static Set<FantasySchedule> createSchedulesNonRecursive(Player teamName) {
+    public static Set<FantasySchedule> createSchedulesNonRecursive(SnipperPlayers teamName) {
 
         // Creates list of opponents for a given team
-        List<Player> modOpponents = new ArrayList<>(Arrays.asList(Player.values()));
+        List<SnipperPlayers> modOpponents = new ArrayList<>(Arrays.asList(SnipperPlayers.values()));
         modOpponents.remove(teamName);
-        List<Player> opponents = Collections.unmodifiableList(modOpponents);
+        List<SnipperPlayers> opponents = Collections.unmodifiableList(modOpponents);
 
         // Creates base empty schedule
         FantasySchedule initialSchedule = new FantasySchedule();
@@ -96,7 +93,7 @@ public class FantasySchedule {
                 int team1 = 0;
                 int team2 = 0;
 
-                Player[] sched = current.getSchedule();
+                SnipperPlayers[] sched = current.getSchedule();
                 for (int i = 0; i < gamesPlayed; i++) {
                     if ( sched[i].equals(opponents.get(0)) ) {
                         team0++;
@@ -130,9 +127,9 @@ public class FantasySchedule {
 
     public static Set<FantasySchedule> createSchedules(String teamName) {
 
-        List<Player> modOpponents = new ArrayList<>(Arrays.asList(Player.values()));
+        List<SnipperPlayers> modOpponents = new ArrayList<>(Arrays.asList(SnipperPlayers.values()));
         modOpponents.remove(teamName);
-        List<Player> opponents = Collections.unmodifiableList(modOpponents);
+        List<SnipperPlayers> opponents = Collections.unmodifiableList(modOpponents);
 
         // Set for possible schedules
         final Set<FantasySchedule> finalSchedule = new HashSet<>();
@@ -151,15 +148,15 @@ public class FantasySchedule {
     }
 
     private static void createSchedulesRecursive(FantasySchedule current, int week, Set<FantasySchedule> schedule,
-                                                 List<Player> opponents) {
+                                                 List<SnipperPlayers> opponents) {
         week++;
 
         int team0 = 0;
         int team1 = 0;
         int team2 = 0;
 
-        Player[] sched = current.getSchedule();
-        for (Player currentOpponent : sched) {
+        SnipperPlayers[] sched = current.getSchedule();
+        for (SnipperPlayers currentOpponent : sched) {
             if ( currentOpponent.equals(opponents.get(0)) ) {
                 team0++;
             } else if ( currentOpponent.equals(opponents.get(1)) ) {
@@ -198,26 +195,26 @@ public class FantasySchedule {
 //        try{Thread.sleep(2000);} catch (Exception e){}
         System.out.println("Creating all possible schedules");
         long t = System.currentTimeMillis();
-        distributions(Player.ALEX, 2015);
+        distributions(SnipperPlayers.ALEX, 2015);
 
 //        // Create all possible schedules
 //        int currentTime = (int) (System.currentTimeMillis() - t) / 1000;
 //        System.out.println("Total time to create schedules: " + currentTime);
 //
         // Print results
-        distributions(Player.RYAN, 2015);
-        distributions(Player.BILAL, 2015);
-        distributions(Player.FRED, 2015);
+        distributions(SnipperPlayers.RYAN, 2015);
+        distributions(SnipperPlayers.BILAL, 2015);
+        distributions(SnipperPlayers.FRED, 2015);
     }
 
-    private static void distributions(Player teamName, int year) {
+    private static void distributions(SnipperPlayers teamName, int year) {
         Set<FantasySchedule> schedules = createSchedulesNonRecursive(teamName);
         int possibleSchedules = schedules.size();
         int[] wins = Stats.getWinsDistribution(schedules, year, teamName);
         printDistribution(teamName, wins, possibleSchedules);
 
-        Map<Player, Integer> champions = Stats.simSeason(schedules, year, teamName);
-        for (Player player : Player.values()) {
+        Map<SnipperPlayers, Integer> champions = Stats.simSeason(schedules, year, teamName);
+        for (SnipperPlayers player : SnipperPlayers.values()) {
             System.out.println(player + " won the season " + champions.get(player) + " times!");
             double percent = (double) champions.get(player) / (double) possibleSchedules * 100.0;
             System.out.println("That is " + percent + " of the time!" );
@@ -237,7 +234,7 @@ public class FantasySchedule {
         } catch(Exception e){}
     }
 
-    private static void printDistribution(Player teamName, int[] wins, int possibleScheds) {
+    private static void printDistribution(SnipperPlayers teamName, int[] wins, int possibleScheds) {
         for (int i = 0; i < NUM_GAMES_PER_SEASON + 1; i++) {
             double percent = (double) wins[i] / (double) possibleScheds * 100.0;
             System.out.println(teamName.toString() +  " had " + i + " wins " + wins[i] + " times!");
